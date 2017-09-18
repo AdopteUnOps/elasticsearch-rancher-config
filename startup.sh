@@ -7,7 +7,7 @@ RANCHER_BASEURL="rancher-metadata.rancher.internal/latest"
 echo "Installing custom elasticsearch config"
 mkdir -p /usr/share/elasticsearch/config
 # elasticsearch.yml
-curl -sfo /usr/share/elasticsearch/config/elasticsearch.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config
+curl -sf ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config >> /usr/share/elasticsearch/config/elasticsearch.yml 
 
 echo "Adding rack awareness to elasticsearch config"
 
