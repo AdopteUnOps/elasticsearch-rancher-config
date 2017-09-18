@@ -31,7 +31,7 @@ done
 UNIQUE_RACK_VALUES=`printf "%s\n" "${rack_values[@]}" | sort -u | tr '\n' ',' | head -c-1`
 echo "Following rack values found on all hosts: $UNIQUE_RACK_VALUES"
 
-rack=`curl --silent http://${RANCHER_BASEURL}/latest/self/host/${rack_aware_uri}`
+rack=`curl --silent http://${RANCHER_BASEURL}/self/host/${rack_aware_uri}`
 echo 'Current rack : ' $rack
 
 
