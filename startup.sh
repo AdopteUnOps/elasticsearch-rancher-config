@@ -7,7 +7,7 @@ RANCHER_BASEURL="rancher-metadata.rancher.internal/latest"
 echo "Installing custom elasticsearch config"
 mkdir -p /usr/share/elasticsearch/config
 # elasticsearch.yml
-curl -so /usr/share/elasticsearch/config/elasticsearch.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config
+curl -sfo /usr/share/elasticsearch/config/elasticsearch.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config
 
 echo "Adding rack awareness to elasticsearch config"
 
@@ -53,7 +53,7 @@ node.attr.rack: \"${rack}\"
 # role mapping specific
 echo "installing custom role mapping"
 mkdir -p /usr/share/elasticsearch/config/x-pack
-curl -so /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
+curl -sfo /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
 
 # run elasticsearch
 /usr/share/elasticsearch/bin/es-docker
