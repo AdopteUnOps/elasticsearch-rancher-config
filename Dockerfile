@@ -6,4 +6,4 @@ RUN apt-get update && \
 
 ADD startup.sh /scripts/startup.sh
 
-CMD ["/scripts/startup.sh"]
+VOLUME /scripts
