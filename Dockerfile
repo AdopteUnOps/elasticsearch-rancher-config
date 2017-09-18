@@ -4,6 +4,6 @@ RUN apt-get update && \
     apt-get -y install curl jq && \
     apt-get clean -q
 
-ADD startup.sh /usr/bin/startup.sh
+ADD startup.sh /scripts/startup.sh
 
-CMD ["/usr/bin/startup.sh"]
+CMD ["/scripts/startup.sh"]

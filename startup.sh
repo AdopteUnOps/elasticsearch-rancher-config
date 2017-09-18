@@ -5,6 +5,7 @@ RANCHER_BASEURL="rancher-metadata.rancher.internal/latest"
 
 
 echo "installing custom elasticsearch config"
+mkdir -p /usr/share/elasticsearch/config
 # elasticsearch.yml
 curl -so /usr/share/elasticsearch/config/elasticsearch.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config
 
@@ -30,7 +31,7 @@ done
 UNIQUE_RACK_VALUES=`printf "%s\n" "${rack_values[@]}" | sort -u | tr '\n' ',' | head -c-1`
 echo "Following rack values found on all hosts: $UNIQUE_RACK_VALUES"
 
-rack=`curl --silent http://$RANCHER_HOST/latest/self/host/${rack_aware_uri}`
+rack=`curl --silent http://${RANCHER_BASEURL}/latest/self/host/${rack_aware_uri}`
 echo 'Current rack : ' $rack
 
 
@@ -42,6 +43,7 @@ node.attr.rack: \"${rack}\"
 
 # role mapping specific
 echo "installing custom role mapping"
+mkdir -p /usr/share/elasticsearch/config/x-pack
 curl -so /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
 
 # run elasticsearch
