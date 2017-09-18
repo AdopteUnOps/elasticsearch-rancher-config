@@ -12,9 +12,9 @@ echo "adding rack awareness to elasticsearch config"
 # rack aware handling
 rack_aware_status_code=$(curl -so /dev/null -w  "%{http_code}" ${RANCHER_BASEURL}/hosts/0/labels/rack)
 
-if [ rack_aware_status_code -eq 200 ]; then
+if [ ${rack_aware_status_code} -eq 200 ]; then
   rack_aware_uri="labels/rack"
-elif [[ condition ]]; then
+else
   echo "no host labels 'rack' defined, will use hostname instead"
   rack_aware_uri="hostname"
 fi
@@ -30,7 +30,7 @@ done
 UNIQUE_RACK_VALUES=`printf "%s\n" "${rack_values[@]}" | sort -u | tr '\n' ',' | head -c-1`
 echo "Following rack values found on all hosts: $UNIQUE_RACK_VALUES"
 
-rack=`curl --silent http://$RANCHER_HOST/latest/self/host/labels/rack`
+rack=`curl --silent http://$RANCHER_HOST/latest/self/host/${rack_aware_uri}`
 echo 'Current rack : ' $rack
 
 
@@ -42,17 +42,7 @@ node.attr.rack: \"${rack}\"
 
 # role mapping specific
 echo "installing custom role mapping"
-
-mkdir -p /usr/share/elasticsearch/config/x-pack/config/
 curl -so /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
-
-echo "configuring xpack audit log"
-
-echo "
-logger.xpack_security_audit_logfile.name = org.elasticsearch.xpack.security.audit.logfile.LoggingAuditTrail
-logger.xpack_security_audit_logfile.appenderRef.console.ref = console
-logger.xpack_security_audit_logfile.level = info
-" > /usr/share/elasticsearch/config/x-pack/log4j2.properties
 
 # run elasticsearch
 /usr/share/elasticsearch/bin/es-docker
