@@ -4,10 +4,14 @@ set -e
 RANCHER_BASEURL="rancher-metadata.rancher.internal/latest"
 
 
-echo "Installing custom elasticsearch config"
-mkdir -p /usr/share/elasticsearch/config
-# elasticsearch.yml
-curl -sf ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config >> /usr/share/elasticsearch/config/elasticsearch.yml 
+response=$(curl --write-out %{http_code} --silent --output /dev/null http://${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config)
+if [ "$response" -eq 200 ]
+then
+  echo "Installing custom elasticsearch config"
+  mkdir -p /usr/share/elasticsearch/config
+  # elasticsearch.yml
+  curl -sf ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config >> /usr/share/elasticsearch/config/elasticsearch.yml
+fi
 
 echo "Adding rack awareness to elasticsearch config"
 
@@ -51,9 +55,13 @@ node.attr.rack: \"${rack}\"
 " >> /usr/share/elasticsearch/config/elasticsearch.yml
 
 # role mapping specific
-echo "installing custom role mapping"
-mkdir -p /usr/share/elasticsearch/config/x-pack
-curl -sfo /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
+response=$(curl --write-out %{http_code} --silent --output /dev/null http://${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config)
+if [ "$response" -eq 200 ]
+then
+  echo "installing custom role mapping"
+  mkdir -p /usr/share/elasticsearch/config/x-pack
+  curl -sfo /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
+fi
 
 # run elasticsearch
 /usr/share/elasticsearch/bin/es-docker
