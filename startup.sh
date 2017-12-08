@@ -64,4 +64,4 @@ then
 fi
 
 # run elasticsearch
-/usr/share/elasticsearch/bin/es-docker
+eval $ES_ENTRYPOINT
