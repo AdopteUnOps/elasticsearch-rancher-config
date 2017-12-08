@@ -4,8 +4,6 @@ RUN apt-get update && \
     apt-get -y install curl jq && \
     apt-get clean -q
 
-ENV ES_ENTRYPOINT "/usr/local/bin/docker-entrypoint.sh eswrapper"
-
 ADD startup.sh /scripts/startup.sh
 
 VOLUME /scripts

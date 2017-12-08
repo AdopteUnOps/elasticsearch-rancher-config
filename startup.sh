@@ -63,5 +63,10 @@ then
   curl -sfo /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
 fi
 
+if [ -z "${ES_ENTRYPOINT}" ]
+then
+  ES_ENTRYPOINT="/usr/local/bin/docker-entrypoint.sh eswrapper"
+fi
+
 # run elasticsearch
 eval $ES_ENTRYPOINT
