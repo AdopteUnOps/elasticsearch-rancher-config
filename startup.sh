@@ -10,7 +10,7 @@ then
   echo "Installing custom elasticsearch config"
   mkdir -p /usr/share/elasticsearch/config
   # elasticsearch.yml
-  curl -sf ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config >> /usr/share/elasticsearch/config/elasticsearch.yml
+  curl -sf ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-config > /usr/share/elasticsearch/config/elasticsearch.yml
 fi
 
 echo "Adding rack awareness to elasticsearch config"
