@@ -63,6 +63,21 @@ then
   curl -sfo /usr/share/elasticsearch/config/x-pack/role_mapping.yml ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-role-config
 fi
 
+# Plugins
+response=$(curl --write-out %{http_code} --silent --output /dev/null http://${RANCHER_BASEURL}/self/service/metadata/elasticsearch-plugins)
+if [ "$response" -eq 200 ]
+then
+  echo "Installing Elasticsearch plugins"
+  curl -sfo /usr/share/elasticsearch/plugins.txt ${RANCHER_BASEURL}/self/service/metadata/elasticsearch-plugins
+  PLUGIN_TXT=${PLUGIN_TXT:-/usr/share/elasticsearch/plugins.txt}
+  
+  if [ -f "$PLUGIN_TXT" ]; then
+    for plugin in $(<"${PLUGIN_TXT}"); do
+      /usr/share/elasticsearch/bin/plugin --install $plugin
+    done
+  fi
+fi
+
 if [ -z "${ES_ENTRYPOINT}" ]
 then
   ES_ENTRYPOINT="/usr/local/bin/docker-entrypoint.sh eswrapper"
