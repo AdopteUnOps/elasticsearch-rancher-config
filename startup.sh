@@ -73,7 +73,7 @@ then
   
   if [ -f "$PLUGIN_TXT" ]; then
     for plugin in $(<"${PLUGIN_TXT}"); do
-      /usr/share/elasticsearch/bin/plugin --install $plugin
+      yes | /usr/share/elasticsearch/bin/elasticsearch-plugin install $plugin
     done
   fi
 fi
